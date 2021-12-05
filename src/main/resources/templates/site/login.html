@@ -91,8 +91,8 @@
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<img th:src="@{/img/captcha.png}" style="width:100px;height:40px;" class="mr-2"/>
-							<a href="javascript:;" class="font-size-12 align-bottom">刷新验证码</a>
+							<img th:src="@{/kaptcha}" id="kaptcha" style="width:100px;height:40px;" class="mr-2"/>
+							<a href="javascript:refresh_kaptcha();" class="font-size-12 align-bottom">刷新验证码</a>
 						</div>
 					</div>				
 					<div class="form-group row mt-4">
@@ -179,5 +179,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script th:src="@{/js/global.js}"></script>
+	<!--CONTEXT_PATH放在了global.js，让引用这个js的页面都可以使用这个常量-->
+	<!--路径最后加上一个随机数，避免浏览器误认为是静态资源，偷懒不去访问-->
+	<!--路径要写全，页面中不用是因为thymeleaf帮我们补全项目名-->
+	<script>
+		function refresh_kaptcha(){
+			var path = CONTEXT_PATH + "/kaptcha?p=" + Math.random();
+			$("#kaptcha").attr("src", path);
+		}
+	</script>
 </body>
 </html>

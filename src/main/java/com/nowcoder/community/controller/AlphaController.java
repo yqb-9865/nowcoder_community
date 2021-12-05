@@ -1,14 +1,17 @@
 package com.nowcoder.community.controller;
 
 import com.nowcoder.community.service.AlphaService;
+import com.nowcoder.community.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,4 +95,56 @@ public class AlphaController {
         map.put("age","12");
         return map;
     }
+
+    //cookie示例
+    @RequestMapping(value = "/cookie/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setCookie(HttpServletResponse response){
+        //创建cookie
+        Cookie cookie = new Cookie("code", CommunityUtil.generateUUID());
+        //设置cookie生效范围（浏览器访问服务器时）
+        cookie.setPath("/community/alpha");
+        //设置cookie的生存时间，默认关闭浏览器后删除
+        cookie.setMaxAge(60*10);
+        //发送cookie
+        response.addCookie(cookie);
+        return "set cookie";
+    }
+
+    @RequestMapping(value = "/cookie/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCookie(@CookieValue("code") String code){
+        return "get cookie";
+    }
+
+    //session示例
+    //直接声明，springMVC会自动生成注入
+    @RequestMapping(value = "/session/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setSession(HttpSession session){
+        session.setAttribute("id", 1);
+        session.setAttribute("name", "yqb");
+        return "setSession";
+    }
+
+    @RequestMapping(value = "/session/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getSession(HttpSession session){
+        session.getAttribute("id");
+        session.getAttribute("name");
+        return "getSession";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
